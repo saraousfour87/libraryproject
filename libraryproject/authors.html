@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="authors">LibraryProject - Auteurs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/crud.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="dashboard.html" class="logo">
+                    <i class="fas fa-book-open"></i>
+                    <span>LibraryProject</span>
+                </a>
+            </div>
+            <nav class="sidebar-menu">
+                <ul>
+                    <li><a href="dashboard.html"><i class="fas fa-chart-pie"></i> <span data-i18n="dashboard">Tableau de bord</span></a></li>
+                    <li><a href="books.html"><i class="fas fa-book"></i> <span data-i18n="books">Livres</span></a></li>
+                    <li><a href="authors.html" class="active"><i class="fas fa-user-edit"></i> <span data-i18n="authors">Auteurs</span></a></li>
+                    <li><a href="users.html"><i class="fas fa-users"></i> <span data-i18n="members">Membres</span></a></li>
+                    <li><a href="loans.html"><i class="fas fa-hand-holding-heart"></i> <span data-i18n="loans">Emprunts</span></a></li>
+                    <li><a href="categories.html"><i class="fas fa-tags"></i> <span data-i18n="categories">Catégories</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content" id="mainContent">
+            <nav class="navbar">
+                <div class="navbar-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2 data-i18n="authors">Gestion des auteurs</h2>
+                </div>
+                <div class="navbar-right">
+                    <div class="user-info">
+                        <img src="" alt="Avatar" class="user-avatar" id="userAvatar">
+                        <div class="user-details">
+                            <span class="user-name" id="userName"></span>
+                            <span class="user-role" id="userRole"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- SÉLECTEUR DE LANGUE -->
+                    <div class="language-selector">
+                        <i class="fas fa-globe"></i>
+                        <select id="langSelect" class="lang-select">
+                            <option value="fr">Français</option>
+                            <option value="en">English</option>
+                            <option value="ar">العربية</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span data-i18n="logout">Déconnexion</span>
+                    </button>
+                </div>
+            </nav>
+
+            <div class="content-area">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-user-edit"></i>
+                        <span data-i18n="authors">Gestion des auteurs</span>
+                    </h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" onclick="openCreateModal()">
+                            <i class="fas fa-plus"></i>
+                            <span data-i18n="add">Ajouter</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="crud-toolbar">
+                    <div class="search-filters-row">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" data-i18n="search" placeholder="Rechercher...">
+                        </div>
+                        
+                        <div class="filters-group">
+                            <select id="nationalityFilter" class="filter-select">
+                                <option value="" data-i18n="allNationalities">Toutes nationalités</option>
+                            </select>
+                            <select id="centuryFilter" class="filter-select">
+                                <option value="" data-i18n="allCenturies">Tous les siècles</option>
+                            </select>
+                            
+                            <div class="export-buttons">
+                                <button class="btn-export csv" onclick="exportToCSV()">
+                                    <i class="fas fa-file-csv"></i> CSV
+                                </button>
+                                <button class="btn-export pdf" onclick="exportToPDF()">
+                                    <i class="fas fa-file-pdf"></i> PDF
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="crud-table-container">
+                    <table class="crud-table" id="authorsTable">
+                        <thead>
+                            <tr>
+                                <th class="sortable" data-sort="name" data-i18n="name">Nom</th>
+                                <th class="sortable" data-sort="birthDate" data-i18n="birthDate">Date naissance</th>
+                                <th class="sortable" data-sort="nationality" data-i18n="nationality">Nationalité</th>
+                                <th data-i18n="biography">Biographie</th>
+                                <th class="sortable" data-sort="bookCount" data-i18n="books">Livres</th>
+                                <th data-i18n="actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        <i class="fas fa-info-circle"></i>
+                        <span id="paginationInfo">Affichage 1-10 de 0 auteurs</span>
+                    </div>
+                    <div class="pagination-controls">
+                        <div class="per-page-selector">
+                            <label for="perPage" data-i18n="perPage">Afficher :</label>
+                            <select id="perPage" onchange="changePerPage()">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                        <div class="pagination-buttons" id="paginationButtons"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="authorModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">
+                    <i class="fas fa-plus"></i>
+                    <span data-i18n="add">Ajouter un auteur</span>
+                </h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="authorForm" class="crud-form">
+                    <input type="hidden" id="authorId">
+                    <div class="form-group required">
+                        <label for="name" data-i18n="name">Nom</label>
+                        <input type="text" id="name" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="birthDate" data-i18n="birthDate">Date naissance</label>
+                            <input type="date" id="birthDate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="deathDate" data-i18n="deathDate">Date décès</label>
+                            <input type="date" id="deathDate" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label for="nationality" data-i18n="nationality">Nationalité</label>
+                        <input type="text" id="nationality" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="biography" data-i18n="biography">Biographie</label>
+                        <textarea id="biography" class="form-control" rows="4"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal()" data-i18n="cancel">Annuler</button>
+                <button class="btn btn-primary" onclick="saveAuthor()" data-i18n="save">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header danger">
+                <h3 class="modal-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span data-i18n="confirm">Confirmer</span>
+                </h3>
+                <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p data-i18n="confirmDelete">Êtes-vous sûr ?</p>
+                <p><strong id="deleteItemName"></strong></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeDeleteModal()" data-i18n="cancel">Annuler</button>
+                <button class="btn btn-danger" onclick="confirmDelete()" data-i18n="delete">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            fr: {
+                dashboard: 'Tableau de bord', books: 'Livres', authors: 'Auteurs', members: 'Membres',
+                loans: 'Emprunts', categories: 'Catégories', logout: 'Déconnexion', search: 'Rechercher...',
+                add: 'Ajouter', edit: 'Modifier', delete: 'Supprimer', view: 'Voir', save: 'Enregistrer',
+                cancel: 'Annuler', confirm: 'Confirmer', actions: 'Actions', name: 'Nom',
+                birthDate: 'Date naissance', deathDate: 'Date décès', nationality: 'Nationalité',
+                biography: 'Biographie', allNationalities: 'Toutes nationalités', allCenturies: 'Tous les siècles',
+                perPage: 'Afficher :', confirmDelete: 'Êtes-vous sûr ?'
+            },
+            en: {
+                dashboard: 'Dashboard', books: 'Books', authors: 'Authors', members: 'Members',
+                loans: 'Loans', categories: 'Categories', logout: 'Logout', search: 'Search...',
+                add: 'Add', edit: 'Edit', delete: 'Delete', view: 'View', save: 'Save',
+                cancel: 'Cancel', confirm: 'Confirm', actions: 'Actions', name: 'Name',
+                birthDate: 'Birth date', deathDate: 'Death date', nationality: 'Nationality',
+                biography: 'Biography', allNationalities: 'All nationalities', allCenturies: 'All centuries',
+                perPage: 'Show:', confirmDelete: 'Are you sure?'
+            },
+            ar: {
+                dashboard: 'لوحة التحكم', books: 'الكتب', authors: 'المؤلفون', members: 'الأعضاء',
+                loans: 'الإعارات', categories: 'التصنيفات', logout: 'تسجيل الخروج', search: 'بحث...',
+                add: 'إضافة', edit: 'تعديل', delete: 'حذف', view: 'عرض', save: 'حفظ',
+                cancel: 'إلغاء', confirm: 'تأكيد', actions: 'الإجراءات', name: 'الاسم',
+                birthDate: 'تاريخ الميلاد', deathDate: 'تاريخ الوفاة', nationality: 'الجنسية',
+                biography: 'السيرة', allNationalities: 'كل الجنسيات', allCenturies: 'كل القرون',
+                perPage: 'عرض:', confirmDelete: 'هل أنت متأكد؟'
+            }
+        };
+
+        function changeLanguage(lang) {
+            localStorage.setItem('language', lang);
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang]?.[key]) {
+                    if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
+                        el.placeholder = translations[lang][key];
+                    } else if (el.tagName === 'OPTION') {
+                        el.textContent = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('language') || 'fr';
+            const langSelect = document.getElementById('langSelect');
+            if (langSelect) {
+                langSelect.value = savedLang;
+                langSelect.addEventListener('change', (e) => changeLanguage(e.target.value));
+            }
+            changeLanguage(savedLang);
+
+            const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (user.name) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userRole').textContent = user.role === 'admin' ? 'Administrateur' : 'Membre';
+                document.getElementById('userAvatar').src = user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=3498db&color=fff`;
+            }
+
+            document.getElementById('menuToggle')?.addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+                document.getElementById('mainContent').classList.toggle('expanded');
+            });
+        });
+
+        function logout() {
+            Swal.fire({
+                title: translations[localStorage.getItem('language') || 'fr'].confirm,
+                text: 'Êtes-vous sûr ?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Non'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+
+        function openCreateModal() { document.getElementById('authorModal').classList.add('active'); }
+        function closeModal() { document.getElementById('authorModal').classList.remove('active'); }
+        function closeDeleteModal() { document.getElementById('deleteModal').classList.remove('active'); }
+        function saveAuthor() { console.log('Save'); closeModal(); }
+        function confirmDelete() { console.log('Delete'); closeDeleteModal(); }
+        function changePerPage() { console.log('Per page changed'); }
+        function exportToCSV() { console.log('CSV'); }
+        function exportToPDF() { console.log('PDF'); }
+    </script>
+    <script src="assets/js/authors.js"></script>
+</body>
+</html>

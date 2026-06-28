@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="books">LibraryProject - Livres</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- jsPDF pour exports PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/crud.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="dashboard.html" class="logo">
+                    <i class="fas fa-book-open"></i>
+                    <span>LibraryProject</span>
+                </a>
+            </div>
+            <nav class="sidebar-menu">
+                <ul>
+                    <li><a href="dashboard.html"><i class="fas fa-chart-pie"></i> <span class="menu-text" data-i18n="dashboard">Tableau de bord</span></a></li>
+                    <li><a href="books.html" class="active"><i class="fas fa-book"></i> <span class="menu-text" data-i18n="books">Livres</span></a></li>
+                    <li><a href="authors.html"><i class="fas fa-user-edit"></i> <span class="menu-text" data-i18n="authors">Auteurs</span></a></li>
+                    <li><a href="users.html"><i class="fas fa-users"></i> <span class="menu-text" data-i18n="members">Membres</span></a></li>
+                    <li><a href="loans.html"><i class="fas fa-hand-holding-heart"></i> <span class="menu-text" data-i18n="loans">Emprunts</span></a></li>
+                    <li><a href="categories.html"><i class="fas fa-tags"></i> <span class="menu-text" data-i18n="categories">Catégories</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Navbar -->
+            <nav class="navbar">
+                <div class="navbar-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2 data-i18n="books">Gestion des livres</h2>
+                </div>
+                <div class="navbar-right">
+                    <div class="user-info">
+                        <img src="" alt="Avatar" class="user-avatar" id="userAvatar">
+                        <div class="user-details">
+                            <span class="user-name" id="userName"></span>
+                            <span class="user-role" id="userRole"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Sélecteur de langue -->
+                    <div class="language-selector">
+                        <i class="fas fa-globe"></i>
+                        <select id="langSelect" class="lang-select">
+                            <option value="fr">Français</option>
+                            <option value="en">English</option>
+                            <option value="ar">العربية</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span data-i18n="logout">Déconnexion</span>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-book"></i>
+                        <span data-i18n="books">Gestion des livres</span>
+                    </h1>
+                    <div class="page-actions admin-only">
+                        <button class="btn btn-primary" onclick="openCreateModal()">
+                            <i class="fas fa-plus"></i>
+                            <span data-i18n="add">Ajouter</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="crud-toolbar">
+                    <div class="search-filters-row">
+                        <!-- Search Box -->
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" data-i18n="search" placeholder="Rechercher...">
+                        </div>
+                        
+                        <!-- Filters -->
+                        <div class="filters-group">
+                            <select id="categoryFilter" class="filter-select">
+                                <option value="" data-i18n="allCategories">Toutes catégories</option>
+                            </select>
+                            <select id="availabilityFilter" class="filter-select">
+                                <option value="" data-i18n="all">Tous</option>
+                                <option value="available" data-i18n="available">Disponibles</option>
+                                <option value="unavailable" data-i18n="unavailable">Non disponibles</option>
+                            </select>
+                            
+                            <!-- BOUTONS D'EXPORT -->
+                            <div class="export-buttons">
+                                <button class="btn-export csv" onclick="exportToCSV()">
+                                    <i class="fas fa-file-csv"></i> CSV
+                                </button>
+                                <button class="btn-export pdf" onclick="exportToPDF()">
+                                    <i class="fas fa-file-pdf"></i> PDF
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="crud-table-container">
+                    <table class="crud-table" id="booksTable">
+                        <thead>
+                            <tr>
+                                <th class="sortable" data-sort="title" data-i18n="title">Titre</th>
+                                <th class="sortable" data-sort="author" data-i18n="author">Auteur</th>
+                                <th class="sortable" data-sort="category" data-i18n="category">Catégorie</th>
+                                <th class="sortable" data-sort="isbn" data-i18n="isbn">ISBN</th>
+                                <th class="sortable" data-sort="year" data-i18n="year">Année</th>
+                                <th class="sortable" data-sort="copies" data-i18n="copies">Exemplaires</th>
+                                <th class="sortable" data-sort="available" data-i18n="status">Statut</th>
+                                <th data-i18n="actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Données dynamiques -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        <i class="fas fa-info-circle"></i>
+                        <span id="paginationInfo">Affichage 1-10 de 0 livres</span>
+                    </div>
+                    <div class="pagination-controls">
+                        <div class="per-page-selector">
+                            <label for="perPage" data-i18n="perPage">Afficher :</label>
+                            <select id="perPage" onchange="changePerPage()">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                        <div class="pagination-buttons" id="paginationButtons"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Création/Édition -->
+    <div class="modal-overlay" id="bookModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">
+                    <i class="fas fa-plus"></i>
+                    <span data-i18n="add">Ajouter un livre</span>
+                </h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="bookForm" class="crud-form">
+                    <input type="hidden" id="bookId">
+                    
+                    <div class="form-group required">
+                        <label for="title" data-i18n="title">Titre</label>
+                        <input type="text" id="title" class="form-control" required>
+                        <div class="error-message" id="titleError"></div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="author" data-i18n="author">Auteur</label>
+                            <input type="text" id="author" class="form-control" required>
+                            <div class="error-message" id="authorError"></div>
+                        </div>
+
+                        <div class="form-group required">
+                            <label for="isbn" data-i18n="isbn">ISBN</label>
+                            <input type="text" id="isbn" class="form-control" required>
+                            <div class="error-message" id="isbnError"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="category" data-i18n="category">Catégorie</label>
+                            <select id="category" class="form-control" required>
+                                <option value="" data-i18n="selectCategory">Sélectionner une catégorie</option>
+                            </select>
+                            <div class="error-message" id="categoryError"></div>
+                        </div>
+
+                        <div class="form-group required">
+                            <label for="year" data-i18n="year">Année</label>
+                            <input type="number" id="year" class="form-control" min="1800" max="2026" required>
+                            <div class="error-message" id="yearError"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="copies" data-i18n="copies">Exemplaires</label>
+                            <input type="number" id="copies" class="form-control" min="1" required>
+                            <div class="error-message" id="copiesError"></div>
+                        </div>
+
+                        <div class="form-group required">
+                            <label for="available" data-i18n="available">Disponibles</label>
+                            <input type="number" id="available" class="form-control" min="0" required>
+                            <div class="error-message" id="availableError"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal()" data-i18n="cancel">Annuler</button>
+                <button class="btn btn-primary" onclick="saveBook()" data-i18n="save">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Suppression -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header danger">
+                <h3 class="modal-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span data-i18n="confirm">Confirmer</span>
+                </h3>
+                <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p data-i18n="confirmDelete">Êtes-vous sûr de vouloir supprimer ?</p>
+                <p><strong id="deleteItemName"></strong></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeDeleteModal()" data-i18n="cancel">Annuler</button>
+                <button class="btn btn-danger" onclick="confirmDelete()" data-i18n="delete">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/export.js"></script>
+    <script src="assets/js/books.js"></script>
+    
+    <script>
+        // Traductions
+        const translations = {
+            fr: {
+                dashboard: 'Tableau de bord', books: 'Livres', authors: 'Auteurs', members: 'Membres',
+                loans: 'Emprunts', categories: 'Catégories', logout: 'Déconnexion', search: 'Rechercher...',
+                add: 'Ajouter', edit: 'Modifier', delete: 'Supprimer', view: 'Voir', save: 'Enregistrer',
+                cancel: 'Annuler', confirm: 'Confirmer', actions: 'Actions', status: 'Statut',
+                active: 'Actif', inactive: 'Inactif', available: 'Disponible', unavailable: 'Non disponible',
+                title: 'Titre', author: 'Auteur', category: 'Catégorie', isbn: 'ISBN', year: 'Année',
+                copies: 'Exemplaires', allCategories: 'Toutes catégories', all: 'Tous',
+                perPage: 'Afficher :', selectCategory: 'Sélectionner une catégorie',
+                confirmDelete: 'Êtes-vous sûr de vouloir supprimer ?'
+            },
+            en: {
+                dashboard: 'Dashboard', books: 'Books', authors: 'Authors', members: 'Members',
+                loans: 'Loans', categories: 'Categories', logout: 'Logout', search: 'Search...',
+                add: 'Add', edit: 'Edit', delete: 'Delete', view: 'View', save: 'Save',
+                cancel: 'Cancel', confirm: 'Confirm', actions: 'Actions', status: 'Status',
+                active: 'Active', inactive: 'Inactive', available: 'Available', unavailable: 'Unavailable',
+                title: 'Title', author: 'Author', category: 'Category', isbn: 'ISBN', year: 'Year',
+                copies: 'Copies', allCategories: 'All categories', all: 'All',
+                perPage: 'Show:', selectCategory: 'Select a category',
+                confirmDelete: 'Are you sure you want to delete?'
+            },
+            ar: {
+                dashboard: 'لوحة التحكم', books: 'الكتب', authors: 'المؤلفون', members: 'الأعضاء',
+                loans: 'الإعارات', categories: 'التصنيفات', logout: 'تسجيل الخروج', search: 'بحث...',
+                add: 'إضافة', edit: 'تعديل', delete: 'حذف', view: 'عرض', save: 'حفظ',
+                cancel: 'إلغاء', confirm: 'تأكيد', actions: 'الإجراءات', status: 'الحالة',
+                active: 'نشط', inactive: 'غير نشط', available: 'متاح', unavailable: 'غير متاح',
+                title: 'العنوان', author: 'المؤلف', category: 'التصنيف', isbn: 'الرقم الدولي',
+                year: 'السنة', copies: 'النسخ', allCategories: 'جميع التصنيفات', all: 'الكل',
+                perPage: 'عرض:', selectCategory: 'اختر تصنيفاً',
+                confirmDelete: 'هل أنت متأكد من الحذف؟'
+            }
+        };
+
+        function changeLanguage(lang) {
+            localStorage.setItem('language', lang);
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang]?.[key]) {
+                    if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
+                        el.placeholder = translations[lang][key];
+                    } else if (el.tagName === 'OPTION') {
+                        el.textContent = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('language') || 'fr';
+            const langSelect = document.getElementById('langSelect');
+            if (langSelect) {
+                langSelect.value = savedLang;
+                langSelect.addEventListener('change', (e) => changeLanguage(e.target.value));
+            }
+            changeLanguage(savedLang);
+
+            const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (user.name) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userRole').textContent = user.role === 'admin' ? 'Administrateur' : 'Membre';
+                document.getElementById('userAvatar').src = user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=3498db&color=fff`;
+            }
+
+            document.getElementById('menuToggle')?.addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+                document.getElementById('mainContent').classList.toggle('expanded');
+            });
+        });
+
+        function logout() {
+            Swal.fire({
+                title: translations[localStorage.getItem('language') || 'fr'].confirm,
+                text: 'Êtes-vous sûr ?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Non'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+
+        function openCreateModal() { document.getElementById('bookModal').classList.add('active'); }
+        function closeModal() { document.getElementById('bookModal').classList.remove('active'); }
+        function closeDeleteModal() { document.getElementById('deleteModal').classList.remove('active'); }
+        function saveBook() { console.log('Save'); closeModal(); }
+        function confirmDelete() { console.log('Delete'); closeDeleteModal(); }
+        function changePerPage() { console.log('Per page changed'); }
+    </script>
+</body>
+</html>

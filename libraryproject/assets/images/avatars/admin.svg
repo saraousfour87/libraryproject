@@ -1,0 +1,11 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="100" r="90" fill="#2C3E50" stroke="#1A252F" stroke-width="4"/>
+    <circle cx="100" cy="80" r="35" fill="#ECF0F1" stroke="#BDC3C7" stroke-width="2"/>
+    <circle cx="80" cy="75" r="5" fill="#2C3E50"/>
+    <circle cx="120" cy="75" r="5" fill="#2C3E50"/>
+    <path d="M80 100 Q100 115, 120 100" stroke="#2C3E50" stroke-width="3" fill="none"/>
+    <rect x="70" y="120" width="60" height="40" fill="#ECF0F1" stroke="#BDC3C7" stroke-width="2"/>
+    <text x="85" y="150" fill="#2C3E50" font-size="16" font-family="Arial">Admin</text>
+    <text x="140" y="50" fill="#F1C40F" font-size="24" font-family="Arial">👑</text>
+    <path d="M100 30 L110 50 L130 50 L115 65 L120 85 L100 75 L80 85 L85 65 L70 50 L90 50 Z" fill="#F1C40F"/>
+</svg>

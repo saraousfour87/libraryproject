@@ -1,0 +1,204 @@
+/* ===== STYLES RTL POUR L'ARABE ===== */
+
+/* Direction générale */
+[dir="rtl"] body {
+    text-align: right;
+}
+
+/* Sidebar */
+[dir="rtl"] .sidebar {
+    border-left: 1px solid #2c3e50;
+    border-right: none;
+}
+
+[dir="rtl"] .sidebar-menu a {
+    border-left: none;
+    border-right: 3px solid transparent;
+}
+
+[dir="rtl"] .sidebar-menu a:hover,
+[dir="rtl"] .sidebar-menu a.active {
+    border-left: none;
+    border-right-color: #3498db;
+}
+
+[dir="rtl"] .sidebar-menu a i {
+    margin-left: 10px;
+    margin-right: 0;
+}
+
+/* Navbar */
+[dir="rtl"] .navbar-left {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+[dir="rtl"] .navbar-right {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+[dir="rtl"] .user-info {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .user-details {
+    text-align: right;
+}
+
+/* Input groups */
+[dir="rtl"] .input-group i:first-child {
+    left: auto;
+    right: 14px;
+}
+
+[dir="rtl"] .input-group input {
+    padding: 12px 45px 12px 15px;
+}
+
+[dir="rtl"] .toggle-password {
+    right: auto;
+    left: 14px;
+}
+
+/* Search box */
+[dir="rtl"] .search-box i {
+    left: auto;
+    right: 15px;
+}
+
+[dir="rtl"] .search-box input {
+    padding: 12px 45px 12px 15px;
+}
+
+/* Table */
+[dir="rtl"] .crud-table th {
+    text-align: right;
+}
+
+[dir="rtl"] .crud-table td {
+    text-align: right;
+}
+
+[dir="rtl"] .table-actions {
+    justify-content: flex-end;
+}
+
+/* Pagination */
+[dir="rtl"] .pagination-info {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .pagination-controls {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .per-page-selector {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .pagination-buttons {
+    flex-direction: row-reverse;
+}
+
+/* Modals */
+[dir="rtl"] .modal-header {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .modal-footer {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .modal-close {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+/* Forms */
+[dir="rtl"] .form-group label {
+    text-align: right;
+}
+
+[dir="rtl"] .form-row {
+    flex-direction: row-reverse;
+}
+
+/* KPI Cards */
+[dir="rtl"] .kpi-card {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .kpi-content {
+    text-align: left;
+}
+
+/* Filters */
+[dir="rtl"] .filters-group {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .filter-select {
+    background-position: left 12px center;
+    padding: 12px 15px 12px 35px;
+}
+
+/* Badges */
+[dir="rtl"] .status-badge {
+    margin-left: 0;
+    margin-right: 5px;
+}
+
+/* Icons in buttons */
+[dir="rtl"] .btn i {
+    margin-left: 5px;
+    margin-right: 0;
+}
+
+[dir="rtl"] .btn-logout i {
+    margin-left: 5px;
+    margin-right: 0;
+}
+
+/* Charts - inverser la légende */
+[dir="rtl"] .chart-legend {
+    flex-direction: row-reverse;
+}
+
+/* SweetAlert2 RTL support */
+[dir="rtl"] .swal2-popup {
+    direction: rtl;
+}
+
+[dir="rtl"] .swal2-actions {
+    flex-direction: row-reverse;
+}
+
+/* Dropdowns */
+[dir="rtl"] .lang-select {
+    background-position: left 10px center;
+    padding: 8px 12px 8px 30px;
+}
+
+/* Modal content */
+[dir="rtl"] .modal-body {
+    text-align: right;
+}
+
+/* Tables dans les détails */
+[dir="rtl"] .detail-item {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .detail-item-label {
+    margin-left: 10px;
+    margin-right: 0;
+}
+
+/* Animation pour le changement de direction */
+[dir="rtl"] .sidebar,
+[dir="rtl"] .main-content,
+[dir="rtl"] .navbar,
+[dir="rtl"] .content-area {
+    transition: all 0.3s ease;
+}

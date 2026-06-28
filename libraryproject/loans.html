@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="loans">LibraryProject - Emprunts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/crud.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="dashboard.html" class="logo">
+                    <i class="fas fa-book-open"></i>
+                    <span>LibraryProject</span>
+                </a>
+            </div>
+            <nav class="sidebar-menu">
+                <ul>
+                    <li><a href="dashboard.html"><i class="fas fa-chart-pie"></i> <span data-i18n="dashboard">Tableau de bord</span></a></li>
+                    <li><a href="books.html"><i class="fas fa-book"></i> <span data-i18n="books">Livres</span></a></li>
+                    <li><a href="authors.html"><i class="fas fa-user-edit"></i> <span data-i18n="authors">Auteurs</span></a></li>
+                    <li><a href="users.html"><i class="fas fa-users"></i> <span data-i18n="members">Membres</span></a></li>
+                    <li><a href="loans.html" class="active"><i class="fas fa-hand-holding-heart"></i> <span data-i18n="loans">Emprunts</span></a></li>
+                    <li><a href="categories.html"><i class="fas fa-tags"></i> <span data-i18n="categories">Catégories</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content" id="mainContent">
+            <nav class="navbar">
+                <div class="navbar-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2 data-i18n="loans">Gestion des emprunts</h2>
+                </div>
+                <div class="navbar-right">
+                    <div class="user-info">
+                        <img src="" alt="Avatar" class="user-avatar" id="userAvatar">
+                        <div class="user-details">
+                            <span class="user-name" id="userName"></span>
+                            <span class="user-role" id="userRole"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- SÉLECTEUR DE LANGUE -->
+                    <div class="language-selector">
+                        <i class="fas fa-globe"></i>
+                        <select id="langSelect" class="lang-select">
+                            <option value="fr">Français</option>
+                            <option value="en">English</option>
+                            <option value="ar">العربية</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span data-i18n="logout">Déconnexion</span>
+                    </button>
+                </div>
+            </nav>
+
+            <div class="content-area">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <span data-i18n="loans">Gestion des emprunts</span>
+                    </h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" onclick="openCreateModal()">
+                            <i class="fas fa-plus"></i>
+                            <span data-i18n="add">Ajouter</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="crud-toolbar">
+                    <div class="search-filters-row">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" data-i18n="search" placeholder="Rechercher...">
+                        </div>
+                        
+                        <div class="filters-group">
+                            <select id="statusFilter" class="filter-select">
+                                <option value="" data-i18n="allStatus">Tous les statuts</option>
+                                <option value="en cours" data-i18n="active">En cours</option>
+                                <option value="retard" data-i18n="overdue">En retard</option>
+                                <option value="terminé" data-i18n="completed">Terminés</option>
+                            </select>
+                            <select id="periodFilter" class="filter-select">
+                                <option value="" data-i18n="allPeriods">Toutes périodes</option>
+                                <option value="today" data-i18n="today">Aujourd'hui</option>
+                                <option value="week" data-i18n="thisWeek">Cette semaine</option>
+                                <option value="month" data-i18n="thisMonth">Ce mois</option>
+                            </select>
+                            
+                            <div class="export-buttons">
+                                <button class="btn-export csv" onclick="exportToCSV()">
+                                    <i class="fas fa-file-csv"></i> CSV
+                                </button>
+                                <button class="btn-export pdf" onclick="exportToPDF()">
+                                    <i class="fas fa-file-pdf"></i> PDF
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="crud-table-container">
+                    <table class="crud-table" id="loansTable">
+                        <thead>
+                            <tr>
+                                <th class="sortable" data-sort="id" data-i18n="id">ID</th>
+                                <th class="sortable" data-sort="bookTitle" data-i18n="book">Livre</th>
+                                <th class="sortable" data-sort="memberName" data-i18n="member">Membre</th>
+                                <th class="sortable" data-sort="loanDate" data-i18n="loanDate">Date emprunt</th>
+                                <th class="sortable" data-sort="dueDate" data-i18n="dueDate">Date retour</th>
+                                <th class="sortable" data-sort="returnDate" data-i18n="returnDate">Retour effectué</th>
+                                <th class="sortable" data-sort="status" data-i18n="status">Statut</th>
+                                <th data-i18n="actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        <i class="fas fa-info-circle"></i>
+                        <span id="paginationInfo">Affichage 1-10 de 0 emprunts</span>
+                    </div>
+                    <div class="pagination-controls">
+                        <div class="per-page-selector">
+                            <label for="perPage" data-i18n="perPage">Afficher :</label>
+                            <select id="perPage" onchange="changePerPage()">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                        <div class="pagination-buttons" id="paginationButtons"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Nouvel Emprunt -->
+    <div class="modal-overlay" id="loanModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">
+                    <i class="fas fa-plus"></i>
+                    <span data-i18n="add">Nouvel emprunt</span>
+                </h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="loanForm" class="crud-form">
+                    <input type="hidden" id="loanId">
+                    
+                    <div class="form-group required">
+                        <label for="bookId" data-i18n="book">Livre</label>
+                        <select id="bookId" class="form-control" required onchange="updateBookAvailability()">
+                            <option value="" data-i18n="selectBook">Sélectionner un livre</option>
+                        </select>
+                        <small id="bookAvailability" class="text-muted"></small>
+                    </div>
+
+                    <div class="form-group required">
+                        <label for="memberId" data-i18n="member">Membre</label>
+                        <select id="memberId" class="form-control" required>
+                            <option value="" data-i18n="selectMember">Sélectionner un membre</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="loanDate" data-i18n="loanDate">Date emprunt</label>
+                            <input type="date" id="loanDate" class="form-control" required>
+                        </div>
+                        <div class="form-group required">
+                            <label for="dueDate" data-i18n="dueDate">Date retour</label>
+                            <input type="date" id="dueDate" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes" data-i18n="notes">Notes</label>
+                        <textarea id="notes" class="form-control" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal()" data-i18n="cancel">Annuler</button>
+                <button class="btn btn-primary" onclick="saveLoan()" data-i18n="save">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Retour -->
+    <div class="modal-overlay" id="returnModal">
+        <div class="modal">
+            <div class="modal-header success">
+                <h3 class="modal-title">
+                    <i class="fas fa-book-return"></i>
+                    <span data-i18n="returnBook">Retour de livre</span>
+                </h3>
+                <button class="modal-close" onclick="closeReturnModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p data-i18n="confirmReturn">Confirmez-vous le retour ?</p>
+                <p><strong id="returnBookTitle"></strong></p>
+                <p><span data-i18n="member">Membre</span> : <strong id="returnMemberName"></strong></p>
+                <div class="form-group">
+                    <label for="returnDate" data-i18n="returnDate">Date de retour</label>
+                    <input type="date" id="returnDate" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeReturnModal()" data-i18n="cancel">Annuler</button>
+                <button class="btn btn-success" onclick="confirmReturn()" data-i18n="confirm">Confirmer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Suppression -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header danger">
+                <h3 class="modal-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span data-i18n="confirm">Confirmer</span>
+                </h3>
+                <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p data-i18n="confirmDelete">Êtes-vous sûr ?</p>
+                <p><strong id="deleteItemName"></strong></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeDeleteModal()" data-i18n="cancel">Annuler</button>
+                <button class="btn btn-danger" onclick="confirmDelete()" data-i18n="delete">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            fr: {
+                dashboard: 'Tableau de bord', books: 'Livres', authors: 'Auteurs', members: 'Membres',
+                loans: 'Emprunts', categories: 'Catégories', logout: 'Déconnexion', search: 'Rechercher...',
+                add: 'Ajouter', edit: 'Modifier', delete: 'Supprimer', view: 'Voir', save: 'Enregistrer',
+                cancel: 'Annuler', confirm: 'Confirmer', actions: 'Actions', status: 'Statut',
+                active: 'En cours', overdue: 'En retard', completed: 'Terminés', id: 'ID',
+                book: 'Livre', member: 'Membre', loanDate: 'Date emprunt', dueDate: 'Date retour',
+                returnDate: 'Date retour', notes: 'Notes', allStatus: 'Tous les statuts',
+                allPeriods: 'Toutes périodes', today: 'Aujourd\'hui', thisWeek: 'Cette semaine',
+                thisMonth: 'Ce mois', selectBook: 'Sélectionner un livre', selectMember: 'Sélectionner un membre',
+                returnBook: 'Retour de livre', confirmReturn: 'Confirmez-vous le retour ?',
+                perPage: 'Afficher :', confirmDelete: 'Êtes-vous sûr ?'
+            },
+            en: {
+                dashboard: 'Dashboard', books: 'Books', authors: 'Authors', members: 'Members',
+                loans: 'Loans', categories: 'Categories', logout: 'Logout', search: 'Search...',
+                add: 'Add', edit: 'Edit', delete: 'Delete', view: 'View', save: 'Save',
+                cancel: 'Cancel', confirm: 'Confirm', actions: 'Actions', status: 'Status',
+                active: 'Active', overdue: 'Overdue', completed: 'Completed', id: 'ID',
+                book: 'Book', member: 'Member', loanDate: 'Loan date', dueDate: 'Due date',
+                returnDate: 'Return date', notes: 'Notes', allStatus: 'All status',
+                allPeriods: 'All periods', today: 'Today', thisWeek: 'This week',
+                thisMonth: 'This month', selectBook: 'Select book', selectMember: 'Select member',
+                returnBook: 'Return book', confirmReturn: 'Confirm return?',
+                perPage: 'Show:', confirmDelete: 'Are you sure?'
+            },
+            ar: {
+                dashboard: 'لوحة التحكم', books: 'الكتب', authors: 'المؤلفون', members: 'الأعضاء',
+                loans: 'الإعارات', categories: 'التصنيفات', logout: 'تسجيل الخروج', search: 'بحث...',
+                add: 'إضافة', edit: 'تعديل', delete: 'حذف', view: 'عرض', save: 'حفظ',
+                cancel: 'إلغاء', confirm: 'تأكيد', actions: 'الإجراءات', status: 'الحالة',
+                active: 'نشط', overdue: 'متأخر', completed: 'منتهي', id: 'رقم',
+                book: 'كتاب', member: 'عضو', loanDate: 'تاريخ الإعارة', dueDate: 'تاريخ الإرجاع',
+                returnDate: 'تاريخ الإرجاع', notes: 'ملاحظات', allStatus: 'كل الحالات',
+                allPeriods: 'كل الفترات', today: 'اليوم', thisWeek: 'هذا الأسبوع',
+                thisMonth: 'هذا الشهر', selectBook: 'اختر كتاباً', selectMember: 'اختر عضواً',
+                returnBook: 'إرجاع كتاب', confirmReturn: 'تأكيد الإرجاع؟',
+                perPage: 'عرض:', confirmDelete: 'هل أنت متأكد؟'
+            }
+        };
+
+        function changeLanguage(lang) {
+            localStorage.setItem('language', lang);
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang]?.[key]) {
+                    if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
+                        el.placeholder = translations[lang][key];
+                    } else if (el.tagName === 'OPTION') {
+                        el.textContent = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('language') || 'fr';
+            const langSelect = document.getElementById('langSelect');
+            if (langSelect) {
+                langSelect.value = savedLang;
+                langSelect.addEventListener('change', (e) => changeLanguage(e.target.value));
+            }
+            changeLanguage(savedLang);
+
+            const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (user.name) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userRole').textContent = user.role === 'admin' ? 'Administrateur' : 'Membre';
+                document.getElementById('userAvatar').src = user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=3498db&color=fff`;
+            }
+
+            document.getElementById('menuToggle')?.addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+                document.getElementById('mainContent').classList.toggle('expanded');
+            });
+        });
+
+        function logout() {
+            Swal.fire({
+                title: translations[localStorage.getItem('language') || 'fr'].confirm,
+                text: 'Êtes-vous sûr ?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Non'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+
+        function openCreateModal() { document.getElementById('loanModal').classList.add('active'); }
+        function closeModal() { document.getElementById('loanModal').classList.remove('active'); }
+        function closeReturnModal() { document.getElementById('returnModal').classList.remove('active'); }
+        function closeDeleteModal() { document.getElementById('deleteModal').classList.remove('active'); }
+        function updateBookAvailability() { console.log('Update availability'); }
+        function saveLoan() { console.log('Save'); closeModal(); }
+        function returnBook(id) { console.log('Return', id); }
+        function confirmReturn() { console.log('Confirm return'); closeReturnModal(); }
+        function confirmDelete() { console.log('Delete'); closeDeleteModal(); }
+        function changePerPage() { console.log('Per page changed'); }
+        function exportToCSV() { console.log('CSV'); }
+        function exportToPDF() { console.log('PDF'); }
+    </script>
+    <script src="assets/js/loans.js"></script>
+</body>
+</html>

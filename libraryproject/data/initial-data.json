@@ -1,0 +1,403 @@
+{
+  "books": [
+    {
+      "id": "1",
+      "title": "Le Petit Prince",
+      "author": "Antoine de Saint-Exupéry",
+      "isbn": "9782070612758",
+      "category": "1",
+      "year": 1943,
+      "copies": 5,
+      "available": 3,
+      "createdAt": "2025-01-15",
+      "description": "Le Petit Prince est une œuvre de langue française, la plus connue d'Antoine de Saint-Exupéry. Publié en 1943 à New York, c'est un conte poétique et philosophique sous l'apparence d'un conte pour enfants."
+    },
+    {
+      "id": "2",
+      "title": "1984",
+      "author": "George Orwell",
+      "isbn": "9780451524935",
+      "category": "2",
+      "year": 1949,
+      "copies": 3,
+      "available": 1,
+      "createdAt": "2025-01-20",
+      "description": "1984 est un roman de science-fiction dystopique publié en 1949. Il décrit une société totalitaire où le Parti unique contrôle tous les aspects de la vie."
+    },
+    {
+      "id": "3",
+      "title": "Les Misérables",
+      "author": "Victor Hugo",
+      "isbn": "9782253096344",
+      "category": "3",
+      "year": 1862,
+      "copies": 2,
+      "available": 2,
+      "createdAt": "2025-02-01",
+      "description": "Les Misérables est un roman de Victor Hugo paru en 1862. Il décrit la vie de pauvres gens dans Paris et la France provinciale du XIXe siècle."
+    },
+    {
+      "id": "4",
+      "title": "Dune",
+      "author": "Frank Herbert",
+      "isbn": "9780441013593",
+      "category": "2",
+      "year": 1965,
+      "copies": 4,
+      "available": 4,
+      "createdAt": "2025-02-10",
+      "description": "Dune est un roman de science-fiction écrit par Frank Herbert et publié en 1965. Il se déroule dans un futur lointain où l'humanité a colonisé la galaxie."
+    },
+    {
+      "id": "5",
+      "title": "Notre-Dame de Paris",
+      "author": "Victor Hugo",
+      "isbn": "9782253006572",
+      "category": "3",
+      "year": 1831,
+      "copies": 2,
+      "available": 0,
+      "createdAt": "2025-02-15",
+      "description": "Notre-Dame de Paris est un roman historique de Victor Hugo, publié en 1831. Il raconte l'histoire de la bohémienne Esmeralda et du sonneur de cloches Quasimodo."
+    },
+    {
+      "id": "6",
+      "title": "L'Étranger",
+      "author": "Albert Camus",
+      "isbn": "9782070360024",
+      "category": "3",
+      "year": 1942,
+      "copies": 3,
+      "available": 2,
+      "createdAt": "2025-03-01",
+      "description": "L'Étranger est le premier roman d'Albert Camus, paru en 1942. Il met en scène un personnage-narrateur, Meursault, qui vit en Algérie française."
+    },
+    {
+      "id": "7",
+      "title": "Harry Potter à l'école des sorciers",
+      "author": "J.K. Rowling",
+      "isbn": "9782070541270",
+      "category": "6",
+      "year": 1997,
+      "copies": 6,
+      "available": 3,
+      "createdAt": "2025-03-05",
+      "description": "Harry Potter, un jeune orphelin, découvre qu'il est un sorcier et intègre l'école de sorcellerie Poudlard."
+    }
+  ],
+
+  "authors": [
+    {
+      "id": "1",
+      "name": "Antoine de Saint-Exupéry",
+      "birthDate": "1900-06-29",
+      "deathDate": "1944-07-31",
+      "nationality": "Française",
+      "biography": "Écrivain, poète et aviateur français. Auteur du 'Petit Prince', un des livres les plus traduits au monde. Disparu en mission pendant la Seconde Guerre mondiale.",
+      "bookCount": 15,
+      "photo": "assets/images/authors/saint-exupery.jpg"
+    },
+    {
+      "id": "2",
+      "name": "George Orwell",
+      "birthDate": "1903-06-25",
+      "deathDate": "1950-01-21",
+      "nationality": "Britannique",
+      "biography": "Écrivain et journaliste britannique, auteur de '1984' et 'La Ferme des animaux'. Ses œuvres sont des critiques du totalitarisme.",
+      "bookCount": 22,
+      "photo": "assets/images/authors/orwell.jpg"
+    },
+    {
+      "id": "3",
+      "name": "Victor Hugo",
+      "birthDate": "1802-02-26",
+      "deathDate": "1885-05-22",
+      "nationality": "Française",
+      "biography": "Poète, dramaturge et romancier français. Figure majeure du romantisme. Auteur des 'Misérables', de 'Notre-Dame de Paris' et de nombreux recueils de poésie.",
+      "bookCount": 45,
+      "photo": "assets/images/authors/hugo.jpg"
+    },
+    {
+      "id": "4",
+      "name": "Albert Camus",
+      "birthDate": "1913-11-07",
+      "deathDate": "1960-01-04",
+      "nationality": "Française",
+      "biography": "Écrivain, philosophe et journaliste français. Prix Nobel de littérature en 1957. Auteur de 'L'Étranger', 'La Peste' et 'Le Mythe de Sisyphe'.",
+      "bookCount": 18,
+      "photo": "assets/images/authors/camus.jpg"
+    },
+    {
+      "id": "5",
+      "name": "J.K. Rowling",
+      "birthDate": "1965-07-31",
+      "deathDate": null,
+      "nationality": "Britannique",
+      "biography": "Romancière britannique, auteure de la série Harry Potter, devenue un phénomène mondial. Écrit également sous le pseudonyme Robert Galbraith.",
+      "bookCount": 32,
+      "photo": "assets/images/authors/rowling.jpg"
+    },
+    {
+      "id": "6",
+      "name": "Frank Herbert",
+      "birthDate": "1920-10-08",
+      "deathDate": "1986-02-11",
+      "nationality": "Américaine",
+      "biography": "Écrivain de science-fiction américain, célèbre pour sa série 'Dune', considérée comme un chef-d'œuvre du genre.",
+      "bookCount": 28,
+      "photo": "assets/images/authors/herbert.jpg"
+    }
+  ],
+
+  "members": [
+    {
+      "id": "1",
+      "name": "Jean Dupont",
+      "email": "jean.dupont@email.com",
+      "phone": "0612345678",
+      "address": "15 Rue de Paris, 75001 Paris",
+      "birthDate": "1985-06-15",
+      "registeredAt": "2025-01-15",
+      "status": "actif",
+      "membershipType": "premium",
+      "notes": "Membre fidèle, préfère les romans classiques",
+      "loansCount": 2,
+      "photo": "assets/images/members/jean.jpg"
+    },
+    {
+      "id": "2",
+      "name": "Marie Martin",
+      "email": "marie.martin@email.com",
+      "phone": "0687654321",
+      "address": "8 Avenue Victor Hugo, 69002 Lyon",
+      "birthDate": "1990-03-22",
+      "registeredAt": "2025-02-20",
+      "status": "actif",
+      "membershipType": "standard",
+      "notes": "",
+      "loansCount": 1,
+      "photo": "assets/images/members/marie.jpg"
+    },
+    {
+      "id": "3",
+      "name": "Pierre Durand",
+      "email": "pierre.durand@email.com",
+      "phone": "0678912345",
+      "address": "23 Rue de la République, 13001 Marseille",
+      "birthDate": "1978-11-08",
+      "registeredAt": "2024-11-10",
+      "status": "inactif",
+      "membershipType": "standard",
+      "notes": "En vacances jusqu'à juin",
+      "loansCount": 0,
+      "photo": "assets/images/members/pierre.jpg"
+    },
+    {
+      "id": "4",
+      "name": "Sophie Bernard",
+      "email": "sophie.bernard@email.com",
+      "phone": "0645678901",
+      "address": "5 Rue des Lilas, 31000 Toulouse",
+      "birthDate": "1995-09-30",
+      "registeredAt": "2025-03-05",
+      "status": "actif",
+      "membershipType": "student",
+      "notes": "Étudiante en littérature",
+      "loansCount": 3,
+      "photo": "assets/images/members/sophie.jpg"
+    },
+    {
+      "id": "5",
+      "name": "Lucas Petit",
+      "email": "lucas.petit@email.com",
+      "phone": "0623456789",
+      "address": "12 Rue Voltaire, 44000 Nantes",
+      "birthDate": "1988-12-03",
+      "registeredAt": "2025-01-25",
+      "status": "actif",
+      "membershipType": "premium",
+      "notes": "Intéressé par la science-fiction",
+      "loansCount": 4,
+      "photo": "assets/images/members/lucas.jpg"
+    }
+  ],
+
+  "loans": [
+    {
+      "id": "1",
+      "bookId": "1",
+      "bookTitle": "Le Petit Prince",
+      "memberId": "1",
+      "memberName": "Jean Dupont",
+      "loanDate": "2025-03-10",
+      "dueDate": "2025-03-24",
+      "returnDate": null,
+      "status": "en cours",
+      "notes": ""
+    },
+    {
+      "id": "2",
+      "bookId": "2",
+      "bookTitle": "1984",
+      "memberId": "2",
+      "memberName": "Marie Martin",
+      "loanDate": "2025-02-15",
+      "dueDate": "2025-03-01",
+      "returnDate": null,
+      "status": "retard",
+      "notes": "Relance effectuée le 05/03"
+    },
+    {
+      "id": "3",
+      "bookId": "3",
+      "bookTitle": "Les Misérables",
+      "memberId": "1",
+      "memberName": "Jean Dupont",
+      "loanDate": "2025-01-10",
+      "dueDate": "2025-01-24",
+      "returnDate": "2025-01-22",
+      "status": "terminé",
+      "notes": ""
+    },
+    {
+      "id": "4",
+      "bookId": "4",
+      "bookTitle": "Dune",
+      "memberId": "5",
+      "memberName": "Lucas Petit",
+      "loanDate": "2025-03-05",
+      "dueDate": "2025-03-19",
+      "returnDate": null,
+      "status": "en cours",
+      "notes": ""
+    },
+    {
+      "id": "5",
+      "bookId": "6",
+      "bookTitle": "L'Étranger",
+      "memberId": "4",
+      "memberName": "Sophie Bernard",
+      "loanDate": "2025-03-08",
+      "dueDate": "2025-03-22",
+      "returnDate": null,
+      "status": "en cours",
+      "notes": ""
+    },
+    {
+      "id": "6",
+      "bookId": "7",
+      "bookTitle": "Harry Potter à l'école des sorciers",
+      "memberId": "4",
+      "memberName": "Sophie Bernard",
+      "loanDate": "2025-03-01",
+      "dueDate": "2025-03-15",
+      "returnDate": "2025-03-14",
+      "status": "terminé",
+      "notes": ""
+    }
+  ],
+
+  "categories": [
+    {
+      "id": "1",
+      "name": "Fiction",
+      "description": "Romans, nouvelles et littérature générale",
+      "bookCount": 45,
+      "color": "#3498db",
+      "createdAt": "2025-01-01"
+    },
+    {
+      "id": "2",
+      "name": "Science-Fiction",
+      "description": "Univers futuristes, voyages spatiaux, technologies avancées",
+      "bookCount": 28,
+      "color": "#2ecc71",
+      "createdAt": "2025-01-01"
+    },
+    {
+      "id": "3",
+      "name": "Classique",
+      "description": "Œuvres littéraires reconnues du patrimoine",
+      "bookCount": 32,
+      "color": "#f1c40f",
+      "createdAt": "2025-01-01"
+    },
+    {
+      "id": "4",
+      "name": "Histoire",
+      "description": "Livres d'histoire et biographies historiques",
+      "bookCount": 19,
+      "color": "#e74c3c",
+      "createdAt": "2025-01-05"
+    },
+    {
+      "id": "5",
+      "name": "Poésie",
+      "description": "Recueils de poèmes et anthologies poétiques",
+      "bookCount": 12,
+      "color": "#9b59b6",
+      "createdAt": "2025-01-10"
+    },
+    {
+      "id": "6",
+      "name": "Jeunesse",
+      "description": "Livres pour enfants et adolescents",
+      "bookCount": 37,
+      "color": "#1abc9c",
+      "createdAt": "2025-01-15"
+    }
+  ],
+
+  "settings": {
+    "libraryName": "Bibliothèque Municipale",
+    "address": "1 Place de la Culture, 75000 Paris",
+    "phone": "01 23 45 67 89",
+    "email": "contact@bibliotheque.fr",
+    "openingHours": {
+      "monday": "10h - 18h",
+      "tuesday": "10h - 18h",
+      "wednesday": "12h - 20h",
+      "thursday": "10h - 18h",
+      "friday": "10h - 19h",
+      "saturday": "09h - 17h",
+      "sunday": "Fermé"
+    },
+    "maxLoansPerMember": 5,
+    "loanDuration": 14,
+    "finePerDay": 0.50
+  },
+
+  "statistics": {
+    "totalBooks": 1250,
+    "totalMembers": 342,
+    "activeLoans": 45,
+    "overdueLoans": 8,
+    "availableBooks": 876,
+    "popularCategories": 12,
+    "monthlyVisitors": 1250,
+    "yearlyRevenue": 3250.50
+  },
+
+  "users": [
+    {
+      "id": "1",
+      "email": "admin@app.com",
+      "password": "admin123",
+      "name": "Admin Principal",
+      "role": "admin",
+      "avatar": "assets/images/avatars/admin.jpg",
+      "createdAt": "2025-01-01",
+      "lastLogin": "2025-03-15"
+    },
+    {
+      "id": "2",
+      "email": "user@app.com",
+      "password": "user123",
+      "name": "Utilisateur Standard",
+      "role": "user",
+      "avatar": "assets/images/avatars/user.jpg",
+      "createdAt": "2025-01-15",
+      "lastLogin": "2025-03-14"
+    }
+  ]
+}

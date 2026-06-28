@@ -1,0 +1,11 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="100" r="90" fill="#2ECC71" stroke="#27AE60" stroke-width="4"/>
+    <circle cx="100" cy="80" r="35" fill="#D5F5E3" stroke="#A3E4D7" stroke-width="2"/>
+    <circle cx="80" cy="75" r="5" fill="#2C3E50"/>
+    <circle cx="120" cy="75" r="5" fill="#2C3E50"/>
+    <path d="M80 100 Q100 115, 120 100" stroke="#2C3E50" stroke-width="3" fill="none"/>
+    <rect x="70" y="120" width="60" height="40" fill="#D5F5E3" stroke="#A3E4D7" stroke-width="2"/>
+    <text x="80" y="150" fill="#2C3E50" font-size="16" font-family="Arial">Pierre</text>
+    <text x="75" y="170" fill="#2C3E50" font-size="12" font-family="Arial">Durand</text>
+    <path d="M40 40 L60 60 M60 40 L40 60" stroke="#E74C3C" stroke-width="3"/>
+</svg>

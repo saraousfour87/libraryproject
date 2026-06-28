@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LibraryProject - Connexion</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a2634;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .login-card {
+            background: white;
+            max-width: 420px;
+            width: 90%;
+            padding: 35px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid #2c3e50;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .login-icon {
+            font-size: 60px;
+            color: #3498db;
+            margin-bottom: 15px;
+            background: rgba(52, 152, 219, 0.1);
+            padding: 15px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .login-header h1 {
+            color: #1e293b;
+            margin-bottom: 8px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .login-header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .role-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .role-option {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8fafc;
+        }
+
+        .role-option:hover {
+            border-color: #3498db;
+            transform: translateY(-2px);
+        }
+
+        .role-option.selected {
+            border-color: #3498db;
+            background: #ebf5ff;
+        }
+
+        .role-option.admin i {
+            color: #e74c3c;
+        }
+
+        .role-option.user i {
+            color: #3498db;
+        }
+
+        .role-option i {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .role-option span {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .role-option small {
+            display: block;
+            color: #64748b;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #1e293b;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group i:first-child {
+            position: absolute;
+            left: 14px;
+            color: #94a3b8;
+            font-size: 16px;
+            z-index: 1;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 40px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s;
+            background: #f8fafc;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+        }
+
+        .input-group input::placeholder {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            cursor: pointer;
+            color: #94a3b8;
+            font-size: 16px;
+            z-index: 1;
+            transition: color 0.3s;
+        }
+
+        .toggle-password:hover {
+            color: #3498db;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .login-footer {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .language-selector {
+            margin-bottom: 15px;
+        }
+
+        .language-selector select {
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: #f8fafc;
+            cursor: pointer;
+            outline: none;
+            font-size: 14px;
+            color: #1e293b;
+            min-width: 130px;
+        }
+
+        .language-selector select:focus {
+            border-color: #3498db;
+        }
+
+        .demo-accounts {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .demo-accounts p {
+            color: #64748b;
+            margin-bottom: 10px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .demo-badges {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .demo-badge {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .demo-badge.admin {
+            background: #fee2e2;
+            color: #e74c3c;
+            border: 1px solid #fecaca;
+        }
+
+        .demo-badge.admin:hover {
+            background: #e74c3c;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .demo-badge.user {
+            background: #e6f7ff;
+            color: #3498db;
+            border: 1px solid #bae7ff;
+        }
+
+        .demo-badge.user:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .demo-badge i {
+            font-size: 16px;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .alert.error {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .alert.success {
+            background: #dcfce7;
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="login-header">
+            <i class="fas fa-book-open login-icon"></i>
+            <h1>LibraryProject</h1>
+            <p>Bienvenue ! Connectez-vous à votre espace</p>
+        </div>
+
+        <div id="error" class="alert error"></div>
+        <div id="success" class="alert success"></div>
+
+        <div class="role-selector">
+            <div class="role-option admin" id="roleAdmin" onclick="selectRole('admin')">
+                <i class="fas fa-user-shield"></i>
+                <span>Administrateur</span>
+                <small>Accès complet</small>
+            </div>
+            <div class="role-option user selected" id="roleUser" onclick="selectRole('user')">
+                <i class="fas fa-user"></i>
+                <span>Utilisateur</span>
+                <small>Accès limité</small>
+            </div>
+        </div>
+
+        <form id="loginForm" autocomplete="off">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" placeholder="entrez votre email" required autocomplete="off">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="••••••••" required autocomplete="off">
+                    <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                </div>
+            </div>
+            <button type="submit" class="btn-login">
+                <i class="fas fa-sign-in-alt"></i> <span>Se connecter</span>
+            </button>
+        </form>
+
+        <div class="login-footer">
+            <div class="language-selector">
+                <select id="langSelect">
+                    <option value="fr">Français</option>
+                    <option value="en">English</option>
+                    <option value="ar">العربية</option>
+                </select>
+            </div>
+            <div class="demo-accounts">
+                <p><i class="fas fa-info-circle"></i> Cliquez pour vous connecter</p>
+                <div class="demo-badges">
+                    <div class="demo-badge admin" onclick="loginAs('admin')">
+                        <i class="fas fa-user-shield"></i> Connexion Admin
+                    </div>
+                    <div class="demo-badge user" onclick="loginAs('user')">
+                        <i class="fas fa-user"></i> Connexion User
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedRole = 'user';
+
+        function selectRole(role) {
+            selectedRole = role;
+            document.getElementById('roleAdmin').classList.remove('selected');
+            document.getElementById('roleUser').classList.remove('selected');
+            if (role === 'admin') {
+                document.getElementById('roleAdmin').classList.add('selected');
+                document.getElementById('email').placeholder = 'admin@demo.com';
+            } else {
+                document.getElementById('roleUser').classList.add('selected');
+                document.getElementById('email').placeholder = 'user@demo.com';
+            }
+        }
+
+        function loginAs(role) {
+            let email, password;
+            if (role === 'admin') {
+                email = 'admin@demo.com';
+                password = 'admin123';
+                selectedRole = 'admin';
+            } else {
+                email = 'user@demo.com';
+                password = 'user123';
+                selectedRole = 'user';
+            }
+            selectRole(role);
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+            performLogin(email, password, role);
+        }
+
+        function performLogin(email, password, role) {
+            const errorDiv = document.getElementById('error');
+            const successDiv = document.getElementById('success');
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            const name = email.split('@')[0] || 'Utilisateur';
+            const session = {
+                id: Date.now().toString(),
+                email: email,
+                name: name,
+                role: role,
+                avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=${role === 'admin' ? 'e74c3c' : '3498db'}&color=fff&size=100`,
+                loginTime: new Date().toISOString()
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(session));
+            successDiv.textContent = 'Connexion réussie ! Redirection...';
+            successDiv.style.display = 'block';
+            setTimeout(() => window.location.href = 'dashboard.html', 1000);
+        }
+
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const password = document.getElementById('password');
+            password.type = password.type === 'password' ? 'text' : 'password';
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        const translations = {
+            fr: { title: 'LibraryProject', welcome: 'Bienvenue ! Connectez-vous à votre espace', email: 'Email', password: 'Mot de passe', login: 'Se connecter', admin: 'Administrateur', user: 'Utilisateur', adminDesc: 'Accès complet', userDesc: 'Accès limité', demoTitle: 'Connexion rapide' },
+            en: { title: 'LibraryProject', welcome: 'Welcome! Login to your space', email: 'Email', password: 'Password', login: 'Sign in', admin: 'Administrator', user: 'User', adminDesc: 'Full access', userDesc: 'Limited access', demoTitle: 'Quick login' },
+            ar: { title: 'مكتبتي', welcome: 'مرحباً! سجل الدخول إلى مساحتك', email: 'البريد الإلكتروني', password: 'كلمة المرور', login: 'تسجيل الدخول', admin: 'مدير', user: 'مستخدم', adminDesc: 'وصول كامل', userDesc: 'وصول محدود', demoTitle: 'دخول سريع' }
+        };
+
+        function changeLanguage(lang) {
+            localStorage.setItem('language', lang);
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            document.querySelector('.login-header h1').textContent = translations[lang].title;
+            document.querySelector('.login-header p').textContent = translations[lang].welcome;
+            document.querySelector('label[for="email"]').textContent = translations[lang].email;
+            document.querySelector('label[for="password"]').textContent = translations[lang].password;
+            document.querySelector('.btn-login span').textContent = translations[lang].login;
+            document.querySelector('.role-option.admin span').textContent = translations[lang].admin;
+            document.querySelector('.role-option.user span').textContent = translations[lang].user;
+            document.querySelector('.role-option.admin small').textContent = translations[lang].adminDesc;
+            document.querySelector('.role-option.user small').textContent = translations[lang].userDesc;
+            document.querySelector('.demo-accounts p').innerHTML = `<i class="fas fa-info-circle"></i> ${translations[lang].demoTitle}`;
+        }
+
+        const langSelect = document.getElementById('langSelect');
+        const savedLang = localStorage.getItem('language') || 'fr';
+        langSelect.value = savedLang;
+        changeLanguage(savedLang);
+        langSelect.addEventListener('change', (e) => changeLanguage(e.target.value));
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            if (!email || !password) {
+                document.getElementById('error').textContent = 'Veuillez remplir tous les champs';
+                document.getElementById('error').style.display = 'block';
+                return;
+            }
+            performLogin(email, password, selectedRole);
+        });
+    </script>
+</body>
+</html>

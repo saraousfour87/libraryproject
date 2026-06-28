@@ -1,0 +1,11 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="100" r="90" fill="#4A148C" stroke="#6A1B9A" stroke-width="4"/>
+    <circle cx="100" cy="80" r="35" fill="#F5F5F5" stroke="#B39DDB" stroke-width="2"/>
+    <circle cx="80" cy="75" r="5" fill="#4A148C"/>
+    <circle cx="120" cy="75" r="5" fill="#4A148C"/>
+    <path d="M85 100 Q100 115, 115 100" stroke="#4A148C" stroke-width="3" fill="none"/>
+    <rect x="70" y="120" width="60" height="35" fill="#F5F5F5" stroke="#B39DDB" stroke-width="2"/>
+    <text x="75" y="145" fill="#4A148C" font-size="14" font-family="Arial">Rowling</text>
+    <path d="M150 50 L160 40 L170 50 L160 60 Z" fill="#FFD700"/>
+    <circle cx="160" cy="50" r="5" fill="#FFD700"/>
+</svg>

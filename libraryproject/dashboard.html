@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="dashboard">LibraryProject - Tableau de bord</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app-wrapper {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: #1a2634;
+            color: white;
+            height: 100vh;
+            overflow-y: auto;
+            transition: all 0.3s;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid #2c3e50;
+            text-align: center;
+        }
+
+        .sidebar-header .logo {
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .sidebar-header .logo i {
+            font-size: 28px;
+            color: #3498db;
+        }
+
+        .sidebar.collapsed .logo span {
+            display: none;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .sidebar-menu li {
+            margin: 5px 0;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            gap: 15px;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(52, 152, 219, 0.2);
+            color: white;
+            border-left-color: #3498db;
+        }
+
+        .sidebar.collapsed .menu-text {
+            display: none;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            height: 70px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            border-bottom: 1px solid #eef2f6;
+            flex-shrink: 0;
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar-left h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #7f8c8d;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-toggle:hover {
+            background: #f8f9fa;
+            color: #3498db;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 5px 15px;
+            background: #f8fafc;
+            border-radius: 40px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #3498db;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lang-select {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #1e293b;
+            cursor: pointer;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .lang-select:hover {
+            border-color: #3498db;
+        }
+
+        .btn-logout {
+            padding: 8px 16px;
+            background: none;
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #e74c3c;
+            color: white;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 30px;
+            overflow-y: auto;
+            height: calc(100vh - 70px);
+        }
+
+        /* Filtres de période */
+        .dashboard-filters {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #eef2f6;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-item label {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 14px;
+        }
+
+        .period-buttons {
+            display: flex;
+            gap: 5px;
+            background: #f8fafc;
+            padding: 3px;
+            border-radius: 10px;
+        }
+
+        .period-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #64748b;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .period-btn:hover {
+            background: white;
+            color: #3498db;
+        }
+
+        .period-btn.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+            cursor: pointer;
+            min-width: 150px;
+            font-size: 14px;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #eef2f6;
+            transition: all 0.3s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            border-color: #3498db;
+            box-shadow: 0 10px 25px rgba(52,152,219,0.1);
+        }
+
+        .kpi-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .kpi-icon.primary { background: rgba(52,152,219,0.1); color: #3498db; }
+        .kpi-icon.success { background: rgba(46,204,113,0.1); color: #27ae60; }
+        .kpi-icon.warning { background: rgba(241,196,15,0.1); color: #f39c12; }
+        .kpi-icon.danger { background: rgba(231,76,60,0.1); color: #e74c3c; }
+        .kpi-icon.info { background: rgba(52,152,219,0.1); color: #3498db; }
+        .kpi-icon.secondary { background: rgba(149,165,166,0.1); color: #7f8c8d; }
+
+        .kpi-content {
+            text-align: right;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        .kpi-label {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* Charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #eef2f6;
+        }
+
+        .chart-header {
+            margin-bottom: 15px;
+        }
+
+        .chart-header h3 {
+            color: #1e293b;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-header h3 i {
+            color: #3498db;
+        }
+
+        .chart-container {
+            height: 250px;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="dashboard.html" class="logo">
+                    <i class="fas fa-book-open"></i>
+                    <span>LibraryProject</span>
+                </a>
+            </div>
+            <nav class="sidebar-menu">
+                <ul>
+                    <li><a href="dashboard.html" class="active"><i class="fas fa-chart-pie"></i> <span class="menu-text" data-i18n="dashboard">Tableau de bord</span></a></li>
+                    <li><a href="books.html"><i class="fas fa-book"></i> <span class="menu-text" data-i18n="books">Livres</span></a></li>
+                    <li><a href="authors.html"><i class="fas fa-user-edit"></i> <span class="menu-text" data-i18n="authors">Auteurs</span></a></li>
+                    <li><a href="users.html"><i class="fas fa-users"></i> <span class="menu-text" data-i18n="members">Membres</span></a></li>
+                    <li><a href="loans.html"><i class="fas fa-hand-holding-heart"></i> <span class="menu-text" data-i18n="loans">Emprunts</span></a></li>
+                    <li><a href="categories.html"><i class="fas fa-tags"></i> <span class="menu-text" data-i18n="categories">Catégories</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Navbar -->
+            <nav class="navbar">
+                <div class="navbar-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2 data-i18n="dashboard">Tableau de bord</h2>
+                </div>
+                <div class="navbar-right">
+                    <div class="user-info">
+                        <img src="" alt="Avatar" class="user-avatar" id="userAvatar">
+                        <div class="user-details">
+                            <span class="user-name" id="userName"></span>
+                            <span class="user-role" id="userRole"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Sélecteur de langue -->
+                    <div class="language-selector">
+                        <i class="fas fa-globe"></i>
+                        <select id="langSelect" class="lang-select">
+                            <option value="fr">Français</option>
+                            <option value="en">English</option>
+                            <option value="ar">العربية</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span data-i18n="logout">Déconnexion</span>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Filtres de période -->
+                <div class="dashboard-filters">
+                    <div class="filter-item">
+                        <label data-i18n="period">Période :</label>
+                        <div class="period-buttons">
+                            <button class="period-btn active" data-period="all" onclick="filterByPeriod('all')">
+                                <i class="fas fa-globe"></i> <span data-i18n="all">Tout</span>
+                            </button>
+                            <button class="period-btn" data-period="day" onclick="filterByPeriod('day')">
+                                <i class="fas fa-calendar-day"></i> <span data-i18n="day">Jour</span>
+                            </button>
+                            <button class="period-btn" data-period="week" onclick="filterByPeriod('week')">
+                                <i class="fas fa-calendar-week"></i> <span data-i18n="week">Semaine</span>
+                            </button>
+                            <button class="period-btn" data-period="month" onclick="filterByPeriod('month')">
+                                <i class="fas fa-calendar-alt"></i> <span data-i18n="month">Mois</span>
+                            </button>
+                            <button class="period-btn" data-period="year" onclick="filterByPeriod('year')">
+                                <i class="fas fa-calendar"></i> <span data-i18n="year">Année</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="kpi-grid" id="kpiGrid"></div>
+
+                <!-- Charts -->
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-pie"></i> <span data-i18n="categoryDistribution">Répartition par catégorie</span></h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="pieChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-pie"></i> <span data-i18n="loanStatus">Statut des emprunts</span></h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="donutChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-bar"></i> <span data-i18n="monthlyLoans">Emprunts par mois</span></h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-line"></i> <span data-i18n="newMembers">Nouveaux membres</span></h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentPeriod = 'all';
+        let pieChart, donutChart, barChart, lineChart;
+        
+        // ===== FORCER LE RECHARGEMENT QUAND ON REVIENT =====
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                console.log('🔄 Page restaurée depuis le cache - Rechargement...');
+                window.location.reload();
+            }
+        });
+
+        // ===== VÉRIFIER LA CONNEXION =====
+        const user = localStorage.getItem('currentUser');
+        if (!user) {
+            window.location.href = 'index.html';
+        }
+
+        // ===== AFFICHER LES INFOS UTILISATEUR =====
+        const userData = JSON.parse(user || '{}');
+        document.getElementById('userName').textContent = userData.name || 'Utilisateur';
+        document.getElementById('userRole').textContent = userData.role === 'admin' ? 'Administrateur' : 'Membre';
+        document.getElementById('userAvatar').src = userData.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name || 'User')}&background=3498db&color=fff&size=100`;
+
+        // ===== FONCTION DE DÉCONNEXION =====
+        function logout() {
+            Swal.fire({
+                title: 'Confirmation',
+                text: 'Êtes-vous sûr de vouloir vous déconnecter ?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3498db',
+                cancelButtonColor: '#e74c3c',
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Non'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+
+        // ===== FONCTION DE FILTRAGE PAR PÉRIODE =====
+        function filterByPeriod(period) {
+            currentPeriod = period;
+            
+            // Mettre à jour les boutons actifs
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.period-btn[data-period="${period}"]`).classList.add('active');
+            
+            // Recharger les données avec le filtre
+            loadDashboardData();
+            
+            // Afficher un message de mise à jour
+            Swal.fire({
+                icon: 'success',
+                title: 'Filtre appliqué',
+                text: `Affichage des données : ${getPeriodLabel(period)}`,
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+
+        // ===== LIBELLÉ DE LA PÉRIODE =====
+        function getPeriodLabel(period) {
+            const labels = {
+                'all': 'Toutes les périodes',
+                'day': 'Aujourd\'hui',
+                'week': 'Cette semaine',
+                'month': 'Ce mois',
+                'year': 'Cette année'
+            };
+            return labels[period] || period;
+        }
+
+        // ===== FILTRER LES DONNÉES PAR PÉRIODE =====
+        function filterDataByPeriod(data, dateField) {
+            if (currentPeriod === 'all' || !data || data.length === 0) return data;
+            
+            const today = new Date();
+            const startDate = new Date();
+            
+            switch(currentPeriod) {
+                case 'day':
+                    startDate.setHours(0, 0, 0, 0);
+                    break;
+                case 'week':
+                    startDate.setDate(today.getDate() - 7);
+                    break;
+                case 'month':
+                    startDate.setMonth(today.getMonth() - 1);
+                    break;
+                case 'year':
+                    startDate.setFullYear(today.getFullYear() - 1);
+                    break;
+                default:
+                    return data;
+            }
+            
+            return data.filter(item => {
+                if (!item[dateField]) return false;
+                const itemDate = new Date(item[dateField]);
+                return itemDate >= startDate;
+            });
+        }
+
+        // ===== CHARGER LES DONNÉES DU DASHBOARD =====
+        function loadDashboardData() {
+            // Récupérer toutes les données
+            let books = JSON.parse(localStorage.getItem('books')) || [];
+            let members = JSON.parse(localStorage.getItem('members')) || [];
+            let loans = JSON.parse(localStorage.getItem('loans')) || [];
+            let categories = JSON.parse(localStorage.getItem('categories')) || [];
+            
+            // Filtrer par période
+            const filteredBooks = filterDataByPeriod(books, 'createdAt');
+            const filteredMembers = filterDataByPeriod(members, 'registeredAt');
+            const filteredLoans = filterDataByPeriod(loans, 'loanDate');
+            
+            // Calculer les statistiques avec les données filtrées
+            const totalBooks = filteredBooks.length;
+            const totalMembers = filteredMembers.filter(m => m?.status === 'actif').length;
+            const activeLoans = filteredLoans.filter(l => l?.status === 'en cours').length;
+            
+            // Emprunts en retard
+            const today = new Date();
+            const overdueLoans = filteredLoans.filter(l => {
+                if (!l || l.status !== 'en cours') return false;
+                if (!l.dueDate) return false;
+                return new Date(l.dueDate) < today;
+            }).length;
+            
+            const availableBooks = filteredBooks.reduce((sum, b) => sum + (b.available || 0), 0);
+            const totalCategories = categories.length;
+
+            // Mettre à jour les KPI
+            document.getElementById('kpiGrid').innerHTML = `
+                <div class="kpi-card">
+                    <div class="kpi-icon primary"><i class="fas fa-book"></i></div>
+                    <div class="kpi-content">
+                        <div class="kpi-value">${totalBooks}</div>
+                        <div class="kpi-label" data-i18n="totalBooks">Total des livres</div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon success"><i class="fas fa-users"></i></div>
+                    <div class="kpi-content">
+                        <div class="kpi-value">${totalMembers}</div>
+                        <div class="kpi-label" data-i18n="totalMembers">Membres actifs</div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon warning"><i class="fas fa-hand-holding-heart"></i></div>
+                    <div class="kpi-content">
+                        <div class="kpi-value">${activeLoans}</div>
+                        <div class="kpi-label" data-i18n="activeLoans">Emprunts en cours</div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon danger"><i class="fas fa-exclamation-circle"></i></div>
+                    <div class="kpi-content">
+                        <div class="kpi-value">${overdueLoans}</div>
+                        <div class="kpi-label" data-i18n="overdueLoans">Emprunts en retard</div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon info"><i class="fas fa-book-open"></i></div>
+                    <div class="kpi-content">
+                        <div class="kpi-value">${availableBooks}</div>
+                        <div class="kpi-label" data-i18n="availableBooks">Livres disponibles</div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon secondary"><i class="fas fa-tags"></i></div>
+                    <div class="kpi-content">
+                        <div class="kpi-value">${totalCategories}</div>
+                        <div class="kpi-label" data-i18n="totalCategories">Catégories</div>
+                    </div>
+                </div>
+            `;
+
+            // Mettre à jour les graphiques avec les données filtrées
+            updateCharts(filteredBooks, filteredLoans, categories, filteredMembers);
+        }
+
+        // ===== METTRE À JOUR LES GRAPHIQUES =====
+        function updateCharts(books, loans, categories, members) {
+            // Détruire les anciens graphiques
+            if (pieChart) pieChart.destroy();
+            if (donutChart) donutChart.destroy();
+            if (barChart) barChart.destroy();
+            if (lineChart) lineChart.destroy();
+
+            // Données pour les graphiques
+            const categoryNames = categories.length ? categories.map(c => c.name) : ['Fiction', 'SF', 'Classique'];
+            const categoryCounts = categories.length 
+                ? categories.map(c => books.filter(b => b.category === c.id).length)
+                : [12, 8, 15];
+
+            // Pie Chart
+            const pieCtx = document.getElementById('pieChart')?.getContext('2d');
+            if (pieCtx) {
+                pieChart = new Chart(pieCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: categoryNames,
+                        datasets: [{
+                            data: categoryCounts,
+                            backgroundColor: ['#3498db', '#2ecc71', '#f1c40f', '#e74c3c', '#9b59b6']
+                        }]
+                    },
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+            }
+
+            // Donut Chart
+            const donutCtx = document.getElementById('donutChart')?.getContext('2d');
+            if (donutCtx) {
+                const enCours = loans.filter(l => l?.status === 'en cours').length || 1;
+                const retard = loans.filter(l => l?.status === 'retard').length || 1;
+                const termine = loans.filter(l => l?.status === 'terminé').length || 1;
+
+                donutChart = new Chart(donutCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['En cours', 'En retard', 'Terminés'],
+                        datasets: [{
+                            data: [enCours, retard, termine],
+                            backgroundColor: ['#2ecc71', '#e74c3c', '#3498db']
+                        }]
+                    },
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        cutout: '70%',
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+            }
+
+            // Bar Chart (Emprunts par mois)
+            const barCtx = document.getElementById('barChart')?.getContext('2d');
+            if (barCtx) {
+                const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+                const monthlyData = new Array(12).fill(0);
+                
+                loans.forEach(loan => {
+                    if (loan?.loanDate) {
+                        const month = new Date(loan.loanDate).getMonth();
+                        monthlyData[month]++;
+                    }
+                });
+
+                // Afficher seulement les 6 derniers mois ou tous selon la période
+                let displayMonths = months;
+                let displayData = monthlyData;
+                
+                if (currentPeriod === 'month') {
+                    // Afficher les 30 derniers jours par jour
+                    const last30Days = [];
+                    const dailyData = [];
+                    for (let i = 29; i >= 0; i--) {
+                        const d = new Date();
+                        d.setDate(d.getDate() - i);
+                        last30Days.push(d.getDate() + '/' + (d.getMonth() + 1));
+                        
+                        const dayLoans = loans.filter(l => {
+                            if (!l.loanDate) return false;
+                            const loanDate = new Date(l.loanDate);
+                            return loanDate.toDateString() === d.toDateString();
+                        }).length;
+                        dailyData.push(dayLoans);
+                    }
+                    displayMonths = last30Days;
+                    displayData = dailyData;
+                }
+
+                barChart = new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: displayMonths,
+                        datasets: [{
+                            label: 'Emprunts',
+                            data: displayData,
+                            backgroundColor: '#3498db'
+                        }]
+                    },
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            }
+
+            // Line Chart (Nouveaux membres)
+            const lineCtx = document.getElementById('lineChart')?.getContext('2d');
+            if (lineCtx) {
+                const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+                const monthlyMembers = new Array(12).fill(0);
+                
+                members.forEach(member => {
+                    if (member?.registeredAt) {
+                        const month = new Date(member.registeredAt).getMonth();
+                        monthlyMembers[month]++;
+                    }
+                });
+
+                let displayMonths = months;
+                let displayData = monthlyMembers;
+                
+                if (currentPeriod === 'month') {
+                    const last30Days = [];
+                    const dailyData = [];
+                    for (let i = 29; i >= 0; i--) {
+                        const d = new Date();
+                        d.setDate(d.getDate() - i);
+                        last30Days.push(d.getDate() + '/' + (d.getMonth() + 1));
+                        
+                        const dayMembers = members.filter(m => {
+                            if (!m.registeredAt) return false;
+                            const regDate = new Date(m.registeredAt);
+                            return regDate.toDateString() === d.toDateString();
+                        }).length;
+                        dailyData.push(dayMembers);
+                    }
+                    displayMonths = last30Days;
+                    displayData = dailyData;
+                }
+
+                lineChart = new Chart(lineCtx, {
+                    type: 'line',
+                    data: {
+                        labels: displayMonths,
+                        datasets: [{
+                            label: 'Membres',
+                            data: displayData,
+                            borderColor: '#2ecc71',
+                            backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            }
+        }
+
+        // ===== MENU TOGGLE =====
+        document.getElementById('menuToggle').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+            document.getElementById('mainContent').classList.toggle('expanded');
+        });
+
+        // ===== CHARGEMENT INITIAL =====
+        document.addEventListener('DOMContentLoaded', () => {
+            // Charger les données
+            loadDashboardData();
+            
+            // Gestion de la langue
+            const langSelect = document.getElementById('langSelect');
+            if (langSelect) {
+                const savedLang = localStorage.getItem('language') || 'fr';
+                langSelect.value = savedLang;
+                langSelect.addEventListener('change', () => {
+                    localStorage.setItem('language', langSelect.value);
+                    location.reload();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

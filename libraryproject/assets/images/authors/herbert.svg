@@ -1,0 +1,10 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="100" r="90" fill="#DAA520" stroke="#B8860B" stroke-width="4"/>
+    <circle cx="100" cy="80" r="35" fill="#F4E6D7" stroke="#CD853F" stroke-width="2"/>
+    <circle cx="80" cy="75" r="5" fill="#8B4513"/>
+    <circle cx="120" cy="75" r="5" fill="#8B4513"/>
+    <path d="M70 95 Q100 110, 130 95" stroke="#8B4513" stroke-width="3" fill="none"/>
+    <rect x="70" y="120" width="60" height="35" fill="#F4E6D7" stroke="#CD853F" stroke-width="2"/>
+    <text x="75" y="145" fill="#8B4513" font-size="14" font-family="Arial">Herbert</text>
+    <text x="140" y="50" fill="#8B4513" font-size="16" font-family="Arial">DUNE</text>
+</svg>
